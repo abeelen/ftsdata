@@ -368,7 +368,7 @@ class SpectralAxisMixinClass(object):
         norm_factor = (dfreq / 2).to_value(u.GHz)
 
         # Cube needs to start at 0 GHz for the FFT
-        pad_start = int(round((freq[0] / dfreq).decompose()))  # to go from 0 to freq_min_GHz-dfreq_GHz
+        pad_start = int(round((freq[0] / dfreq).decompose().value))  # to go from 0 to freq_min_GHz-dfreq_GHz
 
         # Depending on the requested resolution we may have to pad the cube at the end...
         freq_max = cst.c / (dopd_mm * u.mm) / 2

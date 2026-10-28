@@ -25,6 +25,11 @@ from astropy.wcs import WCS
 from scipy.signal import fftconvolve, medfilt, windows
 from scipy.stats import binned_statistic
 
+try:  # NumPy >= 2.0
+    from numpy.exceptions import RankWarning
+except ImportError:  # NumPy < 2.0
+    from numpy import RankWarning
+
 from ._logging import logged
 from ._utils import _insert_in_metadata_fits_safe, elevation_to_airmass
 from .mixins import (
@@ -1124,7 +1129,7 @@ class DoubleSidedOpdData(SingleSidedOpdData):
                         good = np.ones_like(idx, dtype=bool)
 
                     with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", np.exceptions.RankWarning)
+                        warnings.simplefilter("ignore", RankWarning)
                         coef = polyfit(idx[good], spec[good], deg, w=weight[good] ** 2)
 
                     # Null the offset to avoid sign flip
