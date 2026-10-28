@@ -780,7 +780,7 @@ class IdiaMixinClass(object):
         permuted=None,
         dtype="float32",
     ):
-        """Creates an HDUList object from a FTSData object.
+        """Create the IDIA HDF5 datasets and attributes from a FTSData object.
 
         Parameters
         ----------

@@ -324,13 +324,14 @@ itg_model = spec.to_itg(bandpass=bandpass, dopd_mm=0.1)
 framework.  The standard `read` / `write` interface works out of the box:
 
 ```python
-from ftsdata import FTSData
+from ftsdata import SpecData
 
 # Write
 spec.write("cube.fits", overwrite=True)
 
-# Read — type is inferred from the WCS CTYPE
-fts = FTSData.read("cube.fits")
+# Read with the matching class.  For interferograms, OpdData.read() inspects
+# the WCS and returns the geometry-specific subclass.
+spec = SpecData.read("cube.fits")
 ```
 
 The FITS file layout:
@@ -351,25 +352,25 @@ spec.write("cube.fits", compress=True, overwrite=True)
 
 ---
 
-## IDIA HDF5 format (`to_dset`)
+## IDIA HDF5 format
 
-For visualisation in [CARTA](https://cartavis.org), export to the IDIA HDF5
-schema:
+For visualisation in [CARTA](https://cartavis.org), write the IDIA HDF5 schema
+directly through the registered `hdf5` format:
 
 ```python
-import h5py
-from ftsdata import FTSData
+from ftsdata import OpdData
 
-spec = FTSData.read("cube.fits")
-dsets, attrs = spec.to_dset(mip_levels=[2, 4, 8], dtype="float32")
-
-with h5py.File("cube.hdf5", "w") as f:
-    for key, data in dsets.items():
-        f.create_dataset(key, data=data)
-    for key, attr_dict in attrs.items():
-        for k, v in attr_dict.items():
-            f[key].attrs[k] = v
+spec.write("cube.hdf5", mip_levels=[2, 4, 8], dtype="float32")
+spec = OpdData.read("cube.hdf5")   # returns the matching geometry subclass
 ```
+
+The `.hdf5` (or `.h5`) extension selects the writer automatically; pass
+`format="hdf5"` when the filename has another extension.  The writer stores the
+datasets in the `/0` group with the `VERSION` attribute required by the IDIA
+schema, and accepts the same options as `to_dset()` (`mip_levels`, `planes`,
+`dtype`, compression keywords, ...).  `to_dset()` remains available when you
+need the raw datasets and attributes, for example to feed another storage
+backend.
 
 ---
 

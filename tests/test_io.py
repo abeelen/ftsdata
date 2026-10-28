@@ -99,6 +99,23 @@ def test_opddata_hdf5_roundtrip(gaussian_ds, tmp_path):
     assert loaded.wcs.to_header() == gaussian_ds.wcs.to_header()
 
 
+@pytest.mark.parametrize("suffix", [".hdf5", ".h5"])
+def test_hdf5_roundtrip_by_extension(gaussian_ds, tmp_path, suffix):
+    """The .hdf5/.h5 extension selects the registered writer and reader."""
+    h5py = pytest.importorskip("h5py")
+    filepath = str(tmp_path / f"test_auto{suffix}")
+    gaussian_ds.write(filepath)
+    loaded = OpdData.read(filepath)
+    assert isinstance(loaded, OpdData)
+    npt.assert_array_almost_equal(loaded.data, gaussian_ds.data)
+    assert loaded.wcs.to_header() == gaussian_ds.wcs.to_header()
+
+    with h5py.File(filepath, "r") as f:
+        assert f.attrs["VERSION"] == "0"
+        assert "0" in f
+        assert "DATA" in f["0"]
+
+
 def test_specdata_hdf5_roundtrip(gaussian_ds, tmp_path):
     """Test SpecData HDF5 write/read roundtrip."""
     spec = gaussian_ds.to_spectra()

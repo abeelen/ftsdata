@@ -131,19 +131,19 @@ spectrum.write("cube-compressed.fits", compress=True, overwrite=True)
 cube = FTSData.read("cube.fits")
 ```
 
-For CARTA, export the IDIA HDF5 layout with `to_dset`:
+For CARTA, write the IDIA HDF5 layout directly — the `.hdf5` extension
+selects the registered writer and reader:
 
 ```python
-import h5py
+from ftsdata import OpdData
 
-dsets, attrs = cube.to_dset(mip_levels=[2, 4, 8], dtype="float32")
-with h5py.File("cube.hdf5", "w") as f:
-    for key, values in dsets.items():
-        f.create_dataset(key, data=values)
-    for key, values in attrs.items():
-        for name, value in values.items():
-            f[key].attrs[name] = value
+cube.write("cube.hdf5", mip_levels=[2, 4, 8], dtype="float32")
+cube = OpdData.read("cube.hdf5")   # returns the matching geometry subclass
 ```
+
+The writer creates the `/0` group and the `VERSION` attribute required by the
+IDIA schema.  Pass `format="hdf5"` explicitly when the filename lacks an
+`.hdf5` or `.h5` extension.
 
 Co-add cubes that share the same WCS grid:
 

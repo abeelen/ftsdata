@@ -237,12 +237,12 @@ def hdf5_ftsdata_reader(
     cls=None,
 ):
     """
-    Generate and FTSData object from a IDIA hdf5 file.
+    Generate an FTSData object from an IDIA HDF5 file.
 
     Parameters
     ----------
     filename : str
-        output filename, default None, use the cache file name
+        Name of the HDF5 file to read.
     unit : `~astropy.units.Unit`, optional
         Units of the image data. If this argument is provided and there is a
         unit for the image in the FITS header (the keyword ``BUNIT`` is used
@@ -341,14 +341,14 @@ def hdf5_ftsdata_writer(
     **kwargs,
 ):
     """
-    Write FTSData object to IDIA hdf5 file.
+    Write an FTSData object to an IDIA HDF5 file.
 
     Parameters
     ----------
     filename : str
-        output filename, default None, use the cache file name
+        Name of the HDF5 file to write.
     mode : str
-        the open mode for the h5py.File object, by default 'a'
+        the open mode for the h5py.File object, by default 'w'
     file_kwargs, dict, optionnal
         additionnal keyword for h5py.File object, by default None
     dset_mask, dset_uncertainty, dset_flags, dset_hits : str or None, optional
