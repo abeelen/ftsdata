@@ -1,0 +1,59 @@
+stages:
+  - test
+  - deploy
+
+default:
+  interruptible: true
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHONDONTWRITEBYTECODE: "1"
+
+cache:
+  key:
+    files:
+      - pyproject.toml
+  paths:
+    - .cache/pip
+
+.python-setup:
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[all]" pytest
+
+test:
+  extends: .python-setup
+  stage: test
+  image: "python:${PYTHON_VERSION}"
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.9", "3.11", "3.12"]
+  script:
+    - python -m pytest tests -q --junitxml=report.xml
+  artifacts:
+    when: always
+    expire_in: 1 week
+    reports:
+      junit: report.xml
+    paths:
+      - report.xml
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+pages:
+  stage: deploy
+  image: python:3.11
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[docs]"
+  script:
+    - python -m sphinx -W --keep-going -b html docs/source public
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
