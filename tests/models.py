@@ -5,6 +5,8 @@ build cubes with the right OPD geometry.  The ``partial`` objects at the bottom
 of the module are turned into pytest fixtures by ``conftest.py``.
 """
 
+from __future__ import annotations
+
 import astropy.constants as cst
 import astropy.units as u
 import numpy as np
