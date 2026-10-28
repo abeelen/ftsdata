@@ -57,7 +57,7 @@ def fits_ftsdata_writer(
         All additional keywords are passed to :py:mod:`astropy.io.fits`
 
     Raises
-    -------
+    ------
     ValueError
         - If ``self.mask`` is set but not a `numpy.ndarray`.
         - If ``self.uncertainty`` is set but not a

@@ -1,6 +1,7 @@
 # API Reference
 
-`OpdData` is kept as a backward-compatible alias of `SingleSidedOpdData`.
+`OpdData` is kept as a backward-compatible alias of `SingleSidedOpdData`; use
+the latter in new code.
 
 ```{eval-rst}
 .. currentmodule:: ftsdata
@@ -14,7 +15,6 @@
    SingleSidedOpdData
    DoubleSidedOpdData
    OneSidedOpdData
-   OpdData
    apply_blockwise
    get_ils_kernel
    get_itg_binning_correction
