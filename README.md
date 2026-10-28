@@ -16,6 +16,7 @@ independent distribution, and existing code keeps working through the
 
 - **Data containers** — `SingleSidedOpdData`, `DoubleSidedOpdData`,
   `OneSidedOpdData`, `SpecData`, and the retro-compatible `FTSData`.
+  `OpdData` is the geometry-agnostic entry point (`from_array` / `read`).
 - **Interferogram → spectrum** — Forman phase correction, apodisation,
   zero-padding and ITG binning correction.
 - **Spectrum → interferogram** — `to_itg` for forward modelling.
@@ -116,7 +117,7 @@ All containers derive from `astropy.nddata.NDDataArray` and carry:
 | `OneSidedOpdData` | OPD grid starting at the ZPD; real inverse FFT |
 | `SpecData` | Spectrum cube |
 | `FTSData` | Retro-compatible class inheriting from the interferogram and spectrum classes |
-| `OpdData` | Backward-compatible alias of `SingleSidedOpdData` |
+| `OpdData` | Generic entry point when the OPD geometry is unknown; alias of `SingleSidedOpdData`, so `OpdData.from_array` / `OpdData.read` still dispatch |
 
 ## I/O and co-addition
 

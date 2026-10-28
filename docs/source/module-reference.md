@@ -19,7 +19,10 @@ into two geometry-specific subclasses, chosen automatically by
 (geometry-agnostic) `to_spectra`.
 
 ```{note}
-`OpdData` is kept as a backward-compatible alias of `SingleSidedOpdData`.
+`OpdData` is the generic entry point when the OPD geometry is unknown.  It is
+an alias of `SingleSidedOpdData`, not a separate class, so `OpdData.from_array`
+and `OpdData.read` dispatch on the OPD geometry.  Direct construction,
+`OpdData(...)`, always creates a `SingleSidedOpdData`.
 ```
 
 ## `FTSData`

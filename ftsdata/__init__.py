@@ -1,8 +1,9 @@
 """ftsdata: FTS data containers, transforms, I/O and co-addition.
 
-This package used to be the single ``kidsdata.ftsdata`` module.  The public
-names are unchanged; ``OpdData`` is kept as an alias of the base interferogram
-class for backward compatibility.
+This package used to be the single ``kidsdata.ftsdata`` module.  The
+interferogram base class is :class:`SingleSidedOpdData`; ``OpdData`` is the
+generic entry point when the OPD geometry is unknown, and :class:`FTSData` is
+kept as a retro-compatibility layer.
 """
 
 import logging
@@ -68,8 +69,9 @@ from .coadd import (
 
 logger = logging.getLogger("FTSData")
 
-# Backward-compatible name: the old module called the base interferogram
-# class ``OpdData``; the geometry-aware base is now ``SingleSidedOpdData``.
+# Generic entry point: when the OPD geometry is unknown, ``OpdData`` is the
+# name to use.  It is an alias of the base class, so ``from_array`` and
+# ``read`` keep dispatching to the geometry-specific subclass.
 OpdData = SingleSidedOpdData
 
 __all__ = [

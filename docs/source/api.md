@@ -1,7 +1,12 @@
 # API Reference
 
-`OpdData` is kept as a backward-compatible alias of `SingleSidedOpdData`; use
-the latter in new code.
+`OpdData` is the generic entry point when the OPD geometry is unknown.  It is
+an alias of `SingleSidedOpdData`, so `OpdData.from_array` and `OpdData.read`
+inspect the OPD axis and return the matching subclass
+(`DoubleSidedOpdData`, `OneSidedOpdData` or `SingleSidedOpdData`).  Direct
+construction, `OpdData(...)`, does not dispatch: use `from_array` or `read`
+when the geometry is not known in advance.  `FTSData` remains the
+retro-compatibility class.
 
 ```{eval-rst}
 .. currentmodule:: ftsdata

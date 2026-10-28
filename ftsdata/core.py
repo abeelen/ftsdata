@@ -268,7 +268,9 @@ class SingleSidedOpdData(OpdAxisMixinClass, WeightMixinClass, HDUMixinClass, Idi
     - :class:`SingleSidedOpdData` for asymmetric OPD axes.
 
     :meth:`from_array` and the FITS/HDF5 readers dispatch to the appropriate
-    subclass automatically when called on the base class.
+    subclass automatically when called on the base class.  When the OPD
+    geometry is unknown, use ``OpdData`` (an alias of this class) as the
+    generic entry point.
 
     Parameters
     ----------
@@ -772,7 +774,7 @@ class SingleSidedOpdData(OpdAxisMixinClass, WeightMixinClass, HDUMixinClass, Idi
         Returns
         -------
         data : SingleSidedOpdData
-            the corresponding OpdData objects.  When called on the base
+            the corresponding interferogram cube.  When called on the base
             :class:`SingleSidedOpdData` class, the returned object is an instance of
             :class:`DoubleSidedOpdData`, :class:`OneSidedOpdData` or
             :class:`SingleSidedOpdData` depending on the OPD geometry.
@@ -1371,7 +1373,7 @@ class OneSidedOpdData(SingleSidedOpdData):
         return output
 
 def _classify_opd(wcs, shape=None):
-    """Return the :class:`OpdData` subclass matching an OPD WCS geometry.
+    """Return the :class:`SingleSidedOpdData` subclass matching an OPD WCS geometry.
 
     The classification follows the same rules as the
     :attr:`OpdAxisMixinClass._is_doublesided` and
@@ -1392,9 +1394,9 @@ def _classify_opd(wcs, shape=None):
     Returns
     -------
     cls : type
-        One of :class:`DoubleSidedOpdData`, :class:`OneSidedOpdData`,
-        :class:`SingleSidedOpdData`, or :class:`OpdData` when the WCS has no
-        OPD axis.
+        One of :class:`DoubleSidedOpdData` or :class:`OneSidedOpdData`
+        depending on the geometry, and :class:`SingleSidedOpdData`
+        otherwise (including when the WCS has no OPD axis).
     """
     physical_type = wcs.world_axis_physical_types
     if "pos.opd" not in physical_type:

@@ -114,8 +114,10 @@ backward compatibility — new code should use `SingleSidedOpdData`,
 `to_spectra` keeps the generic (geometry-agnostic) implementation.
 
 ```{note}
-`OpdData` is still importable as a backward-compatible alias of
-`SingleSidedOpdData`; it is not a separate class anymore.
+`OpdData` is the generic entry point when the OPD geometry is unknown.  It is
+an alias of `SingleSidedOpdData`, so `OpdData.from_array` and `OpdData.read`
+dispatch to the geometry-specific class.  Direct construction, `OpdData(...)`,
+does not dispatch and always creates a `SingleSidedOpdData`.
 ```
 
 ---
@@ -155,8 +157,13 @@ matching subclass:
 
 Calling `from_array` on an explicit subclass always returns that subclass.
 The same dispatch is applied by `SingleSidedOpdData.read` for FITS/HDF5 files
-(while `FTSData.read` still returns a generic `FTSData`).  `OpdData` remains an
-alias of `SingleSidedOpdData`, so old code keeps working.
+(while `FTSData.read` still returns a generic `FTSData`).
+
+When the OPD geometry is not known in advance, use `OpdData` as the generic
+entry point: it is an alias of `SingleSidedOpdData`, so `OpdData.from_array`
+and `OpdData.read` return the matching subclass.  Direct construction,
+`OpdData(...)`, does not dispatch and always creates a `SingleSidedOpdData`;
+prefer `from_array` or `read` in that case.
 
 ```python
 import astropy.units as u
