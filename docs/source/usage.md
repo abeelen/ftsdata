@@ -107,7 +107,9 @@ Its two geometry-specific subclasses implement the direct inversions:
 | `OneSidedOpdData` | ZPD at the start, positive OPDs only | real inverse FFT |
 | `SingleSidedOpdData` | asymmetric (ZPD anywhere else) | phase correction (optional) + extract/fold one side, then `OneSidedOpdData.to_spectra` |
 
+```{eval-rst}
 .. plot:: _static/plot_opd_geometries.py
+```
 
 `SpecData` holds spectral cubes (frequency axis).
 `FTSData` inherits from both `SingleSidedOpdData` and `SpecData` and exists for
