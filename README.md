@@ -56,3 +56,12 @@ from kidsdata.ftsdata import FTSData
 ```bash
 python -m pytest packages/ftsdata/tests
 ```
+
+## Documentation
+
+The Sphinx sources are in `packages/ftsdata/docs/`:
+
+```bash
+python -m pip install -e "./packages/ftsdata[docs]"
+python -m sphinx -b html packages/ftsdata/docs/source packages/ftsdata/docs/_build/html
+```

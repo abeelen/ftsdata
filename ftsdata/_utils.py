@@ -286,7 +286,7 @@ def forman(M):
 
     References
     ----------
-    ..[1] Spencer, L.D., (2005) Spectral Characterization of the Herschel SPIRE
+    .. [1] Spencer, L.D., (2005) Spectral Characterization of the Herschel SPIRE
           Photometer, 2005MsT..........1S
     """
     if M < 1:

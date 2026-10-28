@@ -31,6 +31,15 @@ dask = ["dask"]
 plot = ["matplotlib"]
 psutil = ["psutil"]
 all = ["h5py", "dask", "matplotlib", "psutil"]
+docs = [
+    "sphinx>=7.0",
+    "sphinx-rtd-theme>=2.0",
+    "numpydoc>=1.5",
+    "sphinx-copybutton",
+    "myst-parser>=3.0",
+    "sphinxcontrib-mermaid>=0.9",
+    "matplotlib",
+]
 
 [project.urls]
 Homepage = "https://gitlab.lam.fr/KISS/kidsdata"
