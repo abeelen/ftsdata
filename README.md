@@ -1,6 +1,7 @@
 # ftsdata
 
 [![pipeline status](https://gitlab.lam.fr/KISS/ftsdata/badges/main/pipeline.svg)](https://gitlab.lam.fr/KISS/ftsdata/-/pipelines)
+[![SPEC 0 — Minimum Supported Dependencies](https://img.shields.io/badge/SPEC-0-green?labelColor=%23004811&color=%235CA038)](https://scientific-python.org/specs/spec-0000/)
 
 `ftsdata` is the Fourier-transform spectrometer (FTS) data toolkit for the
 CONCERTO and KIDS reductions.  It provides OPD- and frequency-aware data
@@ -25,6 +26,18 @@ independent distribution, and existing code keeps working through the
   inverse-variance weighting.
 - **Optional kidsdata integration** — opacity correction can use
   `kidsdata.forward_model.ATM` when kidsdata is installed.
+
+## Support policy
+
+`ftsdata` follows [SPEC 0 — Minimum Supported Dependencies](https://scientific-python.org/specs/spec-0000/)
+for Python and core dependency support, with one explicit exception: **Python
+3.8 remains supported** for the CONCERTO environment used by `kidsdata`.
+
+On Python 3.8 the package uses the last compatible NumPy, SciPy and Astropy
+releases; newer Python versions use the current SPEC 0 floors.  Minimum
+versions are raised on minor or major releases, never on patch releases.  The
+current floors and supported versions are listed in
+[docs/source/min_versions.md](docs/source/min_versions.md).
 
 ## Installation
 
