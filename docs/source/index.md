@@ -17,13 +17,13 @@ api
 ## Installation
 
 ```bash
-python -m pip install -e ./packages/ftsdata
+python -m pip install -e .
 ```
 
 Optional extras:
 
 ```bash
-python -m pip install -e "./packages/ftsdata[all]"
+python -m pip install -e ".[all]"
 ```
 
 ## Import paths

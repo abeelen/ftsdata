@@ -7,8 +7,8 @@ uncertainty, mask, and hit-count map.
 
 ```{note}
 This documentation covers the standalone `ftsdata` distribution.  Install it
-with `pip install -e ./packages/ftsdata` (or `pip install ftsdata` once it is
-released).  When `kidsdata` is installed, `SpecData.correct_opacity()` uses
+with `pip install -e .` from the repository root (or `pip install ftsdata` once
+it is released).  When `kidsdata` is installed, `SpecData.correct_opacity()` uses
 `kidsdata.forward_model.ATM` automatically; otherwise pass a model explicitly
 with its `atm=` argument.  The old `kidsdata.ftsdata` import path remains
 available through a compatibility shim.

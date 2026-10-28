@@ -42,7 +42,7 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://gitlab.lam.fr/KISS/kidsdata"
+Homepage = "https://gitlab.lam.fr/KISS/ftsdata"
 
 [tool.setuptools.packages.find]
 where = ["."]

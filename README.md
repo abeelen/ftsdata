@@ -16,13 +16,13 @@ from ftsdata import FTSData, OpdData, SpecData, ftsdata_average
 From this repository:
 
 ```bash
-python -m pip install -e ./packages/ftsdata
+python -m pip install -e .
 ```
 
 Optional features are grouped in extras:
 
 ```bash
-python -m pip install -e "./packages/ftsdata[all]"   # h5py, dask, matplotlib, psutil
+python -m pip install -e ".[all]"   # h5py, dask, matplotlib, psutil
 ```
 
 Only NumPy, SciPy and Astropy are required for the containers and transforms.
@@ -54,14 +54,14 @@ from kidsdata.ftsdata import FTSData
 ## Tests
 
 ```bash
-python -m pytest packages/ftsdata/tests
+python -m pytest tests
 ```
 
 ## Documentation
 
-The Sphinx sources are in `packages/ftsdata/docs/`:
+The Sphinx sources are in `docs/`:
 
 ```bash
-python -m pip install -e "./packages/ftsdata[docs]"
-python -m sphinx -b html packages/ftsdata/docs/source packages/ftsdata/docs/_build/html
+python -m pip install -e ".[docs]"
+python -m sphinx -b html docs/source docs/_build/html
 ```
