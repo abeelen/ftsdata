@@ -1,7 +1,8 @@
 ftsdata
 =========
 
-|pipeline status| |SPEC 0 — Minimum Supported Dependencies|
+|GitLab pipeline status| |GitHub Actions status| |docs|
+|SPEC 0 — Minimum Supported Dependencies|
 
 ``ftsdata`` is the Fourier-transform spectrometer (FTS) data toolkit for
 the CONCERTO and KIDS reductions. It provides OPD- and frequency-aware
@@ -262,7 +263,11 @@ License
 
 BSD 3-clause. See `licenses/LICENSE.rst <licenses/LICENSE.rst>`__.
 
-.. |pipeline status| image:: https://gitlab.lam.fr/KISS/ftsdata/badges/main/pipeline.svg
+.. |GitLab pipeline status| image:: https://gitlab.lam.fr/KISS/ftsdata/badges/main/pipeline.svg
    :target: https://gitlab.lam.fr/KISS/ftsdata/-/pipelines
+.. |GitHub Actions status| image:: https://github.com/abeelen/ftsdata/actions/workflows/ci.yml/badge.svg?branch=main
+   :target: https://github.com/abeelen/ftsdata/actions/workflows/ci.yml
+.. |docs| image:: https://img.shields.io/badge/docs-online-blue
+   :target: https://abeelen.github.io/ftsdata/
 .. |SPEC 0 — Minimum Supported Dependencies| image:: https://img.shields.io/badge/SPEC-0-green?labelColor=%23004811&color=%235CA038
    :target: https://scientific-python.org/specs/spec-0000/
