@@ -1,10 +1,7 @@
 # ftsdata documentation
 
-`ftsdata` provides the Fourier-transform spectrometer data containers,
-transforms, FITS/HDF5 I/O and co-addition routines used by the CONCERTO/KIDS
-reduction.  It is a standalone distribution: it does not import `kidsdata` at
-module import time, but keeps optional integrations when `kidsdata` is
-installed.
+`FTSData` provides the Fourier-transform spectrometer data containers,
+transforms, FITS/HDF5 I/O and co-addition routines.
 
 ```{eval-rst}
 .. plot:: _static/plot_opd_geometries.py
