@@ -107,10 +107,3 @@ axes[2, 0].set_title("Spectrum with hanning apodization")
 # Shared x-label
 axes[2, 0].set_xlabel("OPD (mm)")
 axes[1, 1].set_xlabel("OPD (mm)")
-
-# After os.chdir(_pkg_root), save to the _static directory
-_static_dir = Path("docs") / "source" / "_static"
-_static_dir.mkdir(parents=True, exist_ok=True)
-output_path = _static_dir / "plot_opd_geometries.png"
-fig.savefig(output_path, dpi=180)
-print(f"Saved to {output_path.resolve()}")

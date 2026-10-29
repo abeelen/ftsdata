@@ -6,11 +6,14 @@ reduction.  It is a standalone distribution: it does not import `kidsdata` at
 module import time, but keeps optional integrations when `kidsdata` is
 installed.
 
+```{eval-rst}
+.. plot:: _static/plot_opd_geometries.py
+```
+
 ```{toctree}
 :maxdepth: 2
 
 usage
-module-reference
 api
 min_versions
 ```
