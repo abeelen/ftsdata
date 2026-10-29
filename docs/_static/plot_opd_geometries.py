@@ -6,8 +6,8 @@ from pathlib import Path
 
 # Add the ftsdata package root to sys.path BEFORE any local imports
 # The package root is the parent of the 'ftsdata' package directory
-_this_file = Path(__file__).resolve() if "__file__" in globals() else Path.cwd() / "docs" / "source" / "_static" / "plot_opd_geometries.py"
-_pkg_root = _this_file.parents[3]  # /home/abeelen/Python/ftsdata
+_this_file = Path(__file__).resolve() if "__file__" in globals() else Path.cwd() / "docs" / "_static" / "plot_opd_geometries.py"
+_pkg_root = _this_file.parents[2]  # /home/abeelen/Python/ftsdata
 
 # Insert at front so it takes precedence over namespace package detection
 sys.path.insert(0, str(_pkg_root))
@@ -26,7 +26,7 @@ from ftsdata import (
     OneSidedOpdData,
 )
 
-from tests.models import rect_os, rect_ss, rect_ds
+from ftsdata.tests.models import rect_os, rect_ss, rect_ds
 
 
 # ─── Analytical interferogram of a top-hat spectrum ──────────────────

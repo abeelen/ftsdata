@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def test_importing_ftsdata_does_not_import_kidsdata():
-    project = Path(__file__).resolve().parents[1]
+    project = Path(__file__).resolve().parents[2]
     env = os.environ.copy()
     env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(project), env.get("PYTHONPATH")]))
 

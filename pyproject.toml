@@ -1,16 +1,20 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = [
+    "setuptools>=62.1",
+    "setuptools_scm[toml]>=8.0.0",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ftsdata"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Fourier-transform spectrometer data containers, transforms, I/O and co-addition"
-readme = "README.md"
+readme = { file = "README.rst", content-type = "text/x-rst" }
 requires-python = ">=3.8"
-license = {file = "LICENSE"}
+license = { file = "licenses/LICENSE.rst" }
 authors = [
-    {name = "Alexandre Beelen", email = "alexandre.beelen@lam.fr"},
+    { name = "Alexandre Beelen", email = "alexandre.beelen@lam.fr" },
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
@@ -28,7 +32,7 @@ classifiers = [
 ]
 dependencies = [
     # Python 3.8 is kept as an explicit exception for the CONCERTO environment;
-    # newer versions follow the SPEC 0 floors.  See docs/source/min_versions.md.
+    # newer versions follow the SPEC 0 floors.  See docs/min_versions.md.
     "numpy>=1.24.4; python_version < '3.9'",
     "numpy>=2.0.2; python_version >= '3.9' and python_version < '3.11'",
     "numpy>=2.3.0; python_version >= '3.11'",
@@ -41,6 +45,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
 hdf5 = ["h5py"]
 dask = ["dask"]
 plot = ["matplotlib"]
@@ -58,11 +66,50 @@ docs = [
 
 [project.urls]
 Homepage = "https://gitlab.lam.fr/KISS/ftsdata"
+Repository = "https://gitlab.lam.fr/KISS/ftsdata"
+Documentation = "https://ftsdata-7333b4.docs.lam.fr"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["."]
 include = ["ftsdata*"]
-exclude = ["tests*"]
+
+[tool.setuptools_scm]
+version_file = "ftsdata/version.py"
+fallback_version = "0.1.0"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "ftsdata/tests",
+]
+addopts = "-ra"
+
+[tool.coverage.run]
+omit = [
+    "ftsdata/__init__*",
+    "ftsdata/conftest.py",
+    "ftsdata/tests/*",
+    "ftsdata/version*",
+    "*/ftsdata/__init__*",
+    "*/ftsdata/conftest.py",
+    "*/ftsdata/tests/*",
+    "*/ftsdata/version*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "except ImportError",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "def main(.*):",
+    "pragma: py{ignore_python_version}",
+    "def _ipython_key_completions_",
+    "if TYPE_CHECKING:",
+    "@overload",
+]
 
 [tool.ruff]
 line-length = 120

@@ -6,7 +6,7 @@ import os
 import sys
 
 # Make the ftsdata package importable from the source tree.
-sys.path.insert(0, os.path.abspath("../.."))
+sys.path.insert(0, os.path.abspath(".."))
 
 # -- General configuration ------------------------------------------------
 
@@ -56,6 +56,12 @@ mermaid.initialize({
 autosummary_generate = True
 numpydoc_show_class_members = False
 
+# Treat everything in single backticks as a Python reference.
+default_role = "py:obj"
+
+# Include the __init__ docstring with the class-level docstring.
+autoclass_content = "both"
+
 templates_path = ["_templates"]
 
 source_suffix = {
@@ -79,7 +85,7 @@ release = version
 
 language = "en"
 
-exclude_patterns = []
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 pygments_style = "sphinx"
 

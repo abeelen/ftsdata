@@ -8,6 +8,8 @@ kept as a retro-compatibility layer.
 
 import logging
 
+from .version import version as __version__
+
 from ._utils import (
     FITS_HEADER_COMMENT,
     _import_from,
@@ -75,6 +77,8 @@ logger = logging.getLogger("FTSData")
 OpdData = SingleSidedOpdData
 
 __all__ = [
+    # Version
+    "__version__",
     # Containers
     "SpecData",
     "SingleSidedOpdData",

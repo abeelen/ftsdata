@@ -45,6 +45,6 @@ from kidsdata.ftsdata import FTSData
 ## Building these docs
 
 ```bash
-python -m pip install -r docs/requirements.txt
-python -m sphinx -b html docs/source docs/_build/html
+python -m pip install -e ".[docs]"
+python -m sphinx -b html docs docs/_build/html
 ```

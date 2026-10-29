@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    = "-W"  # This flag turns warnings into errors.
 SPHINXBUILD   ?= python -m sphinx
-SOURCEDIR     = source
+SOURCEDIR     = .
 BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
