@@ -15,11 +15,6 @@ retro-compatibility class.
    :toctree: gen_api
    :nosignatures:
 
-   FTSData
-   SpecData
-   SingleSidedOpdData
-   DoubleSidedOpdData
-   OneSidedOpdData
    apply_blockwise
    get_ils_kernel
    get_itg_binning_correction
