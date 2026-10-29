@@ -1,7 +1,7 @@
 ftsdata
 =========
 
-|GitLab pipeline status| |GitHub Actions status| |docs|
+|GitLab pipeline status| |GitHub Actions status| |docs| |Read the Docs|
 |SPEC 0 — Minimum Supported Dependencies|
 
 ``ftsdata`` is the Fourier-transform spectrometer (FTS) data toolkit for
@@ -230,9 +230,12 @@ The Sphinx sources live in ``docs/``:
    python -m pip install -e ".[docs]"
    python -m sphinx -b html docs docs/_build/html
 
-The built pages are published by GitLab Pages from the ``main`` branch.
-The same documentation build is also wired into GitHub Actions for GitHub
-Pages deployments.
+The built pages are published in three places from the ``main`` branch:
+
+- GitLab Pages: https://ftsdata-7333b4.docs.lam.fr
+- GitHub Pages: https://abeelen.github.io/ftsdata/ (GitHub Actions)
+- Read the Docs: https://ftsdata.readthedocs.io/ (configured by
+  ``.readthedocs.yaml``)
 
 Tests
 -----
@@ -267,7 +270,9 @@ BSD 3-clause. See `licenses/LICENSE.rst <licenses/LICENSE.rst>`__.
    :target: https://gitlab.lam.fr/KISS/ftsdata/-/pipelines
 .. |GitHub Actions status| image:: https://github.com/abeelen/ftsdata/actions/workflows/ci.yml/badge.svg?branch=main
    :target: https://github.com/abeelen/ftsdata/actions/workflows/ci.yml
-.. |docs| image:: https://img.shields.io/badge/docs-online-blue
+.. |docs| image:: https://img.shields.io/badge/docs-GitHub%20Pages-blue
    :target: https://abeelen.github.io/ftsdata/
+.. |Read the Docs| image:: https://readthedocs.org/projects/ftsdata/badge/?version=latest
+   :target: https://ftsdata.readthedocs.io/en/latest/
 .. |SPEC 0 — Minimum Supported Dependencies| image:: https://img.shields.io/badge/SPEC-0-green?labelColor=%23004811&color=%235CA038
    :target: https://scientific-python.org/specs/spec-0000/

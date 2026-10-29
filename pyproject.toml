@@ -68,6 +68,8 @@ docs = [
 Homepage = "https://gitlab.lam.fr/KISS/ftsdata"
 Repository = "https://gitlab.lam.fr/KISS/ftsdata"
 Documentation = "https://ftsdata-7333b4.docs.lam.fr"
+"GitHub Pages" = "https://abeelen.github.io/ftsdata/"
+"Read the Docs" = "https://ftsdata.readthedocs.io/"
 
 [tool.setuptools]
 zip-safe = false
