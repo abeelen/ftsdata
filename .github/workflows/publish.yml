@@ -8,6 +8,11 @@ name: Publish
 # uploads to PyPI for tags starting with "v" (its `upload_to_pypi` input
 # defaults to "refs/tags/v").  Pushes to main and manual runs therefore
 # exercise the whole release path without publishing anything.
+#
+# The `verify-version` job runs first and aborts the release when the version
+# derived from the git history differs from the tag name.  That catches
+# misplaced tags and, in particular, two release tags on the same commit,
+# which makes `git describe` ambiguous.
 
 on:
   push:
@@ -21,8 +26,35 @@ permissions:
   contents: read
 
 jobs:
+  verify-version:
+    name: Check tag and version agree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # setuptools_scm needs the full history and the tags.
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Compare the computed version with the tag
+        # Always run this job (so that `publish` is never skipped), but only
+        # compare for release tags; pushes to main are dry runs.
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          python -m pip install --quiet setuptools_scm
+          version="$(python -m setuptools_scm)"
+          expected="${GITHUB_REF_NAME#v}"
+          echo "tag ${GITHUB_REF_NAME} -> version ${version}"
+          if [ "${version}" != "${expected}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} resolves to version ${version}; refusing to publish."
+            echo "Give every release its own commit: never tag two versions on the same commit."
+            exit 1
+          fi
+
   publish:
     name: Build, test and publish
+    needs: verify-version
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
     with:
       # The test suite imports matplotlib, h5py, dask and psutil, so the

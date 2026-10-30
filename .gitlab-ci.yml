@@ -108,7 +108,10 @@ publish-pypi:
     # setuptools_scm derives the version from the tag checked out by CI.
     - python -m build
     - python -m twine check dist/*
-    - python -m twine upload dist/*
+    # The same tag may already have been published by the GitHub workflow.
+    # PyPI rejects duplicate filenames with an HTTP 400; --skip-existing makes
+    # this job idempotent and still uploads anything that is missing.
+    - python -m twine upload --skip-existing dist/*
   artifacts:
     when: always
     expire_in: 1 week
