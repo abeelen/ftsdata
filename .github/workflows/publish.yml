@@ -1,0 +1,40 @@
+name: Publish
+
+# Adapted from the OpenAstronomy packaging template and guide:
+# https://packaging-guide.openastronomy.org/en/latest/ci.html#publishing-to-pypi
+#
+# The reusable workflow builds the sdist and the pure-Python wheel, installs
+# the sdist in a clean virtual environment, runs the test suite and only
+# uploads to PyPI for tags starting with "v" (its `upload_to_pypi` input
+# defaults to "refs/tags/v").  Pushes to main and manual runs therefore
+# exercise the whole release path without publishing anything.
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Build, test and publish
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
+    with:
+      # The test suite imports matplotlib, h5py, dask and psutil, so the
+      # "all" extra is required on top of "test".
+      test_extras: all,test
+      test_command: pytest --pyargs ftsdata
+      # Only used to build and test the distributions; the sdist and the wheel
+      # are version agnostic (py3-none-any) so this does not restrict users.
+      # Pinned rather than "3.x" because astropy/numpy wheels lag the newest
+      # Python release.
+      python-version: "3.13"
+    secrets:
+      # PyPI API token, stored as a repository (or organisation) secret.
+      # Required for tag builds; without it the upload step fails.
+      pypi_token: ${{ secrets.pypi_token }}

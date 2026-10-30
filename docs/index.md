@@ -13,6 +13,7 @@ transforms, FITS/HDF5 I/O and co-addition routines.
 usage
 api
 min_versions
+releasing
 ```
 
 ## Installation

@@ -13,6 +13,7 @@ cache:
   key:
     files:
       - pyproject.toml
+      - ci/constraints-py38.txt
   paths:
     - .cache/pip
 
@@ -28,7 +29,7 @@ test:
   image: "python:${PYTHON_VERSION}"
   parallel:
     matrix:
-      - PYTHON_VERSION: ["3.8", "3.11", "3.13", "3.14"]
+      - PYTHON_VERSION: ["3.11", "3.13", "3.14"]
   script:
     - python -m pytest --pyargs ftsdata -q --junitxml=report.xml
   artifacts:
@@ -41,6 +42,32 @@ test:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH'
+    # Run the tests in tag pipelines too, so a release is gated by them
+    # before the (manual) publish job becomes playable.
+    - if: '$CI_COMMIT_TAG'
+
+test-python38-legacy:
+  stage: test
+  image: "python:3.8"
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[all,test]" -c ci/constraints-py38.txt
+  script:
+    - python -m pytest --pyargs ftsdata -q --junitxml=report-legacy.xml
+  artifacts:
+    when: always
+    expire_in: 1 week
+    reports:
+      junit: report-legacy.xml
+    paths:
+      - report-legacy.xml
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+    # Run the tests in tag pipelines too, so a release is gated by them
+    # before the (manual) publish job becomes playable.
+    - if: '$CI_COMMIT_TAG'
 
 pages:
   stage: deploy
@@ -57,3 +84,37 @@ pages:
     expire_in: 1 week
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+# Optional release path, mirroring .github/workflows/publish.yml.
+#
+# Publishing is deliberately manual: push a v* tag, wait for the tag pipeline
+# (which runs the test jobs above), then press "play" on this job.  Nothing is
+# ever uploaded automatically.  Delete this job if releases go through GitHub
+# Actions only.
+#
+# Requires a masked, protected CI/CD variable PYPI_API_TOKEN, and a protected
+# v* tag pattern so only maintainers can start a release.
+publish-pypi:
+  stage: deploy
+  image: "python:3.13"
+  interruptible: false
+  variables:
+    TWINE_USERNAME: "__token__"
+    TWINE_PASSWORD: "$PYPI_API_TOKEN"
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip build twine
+  script:
+    # setuptools_scm derives the version from the tag checked out by CI.
+    - python -m build
+    - python -m twine check dist/*
+    - python -m twine upload dist/*
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - dist/
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v[0-9]/'
+      when: manual
+      allow_failure: false

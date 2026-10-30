@@ -22,6 +22,7 @@ from astropy.nddata.ccddata import (
 from astropy.wcs import WCS
 from scipy.ndimage import binary_closing
 
+from ._compat import _HITS_UNSET, resolve_hits
 from ._utils import (
     FITS_HEADER_COMMENT,
     _insert_in_metadata_fits_safe,
@@ -238,6 +239,8 @@ class SpectralAxisMixinClass(object):
         if self.hits is None:
             return None
         try:
+            # Hits are usually spatial only for spectral cubes, so remove the
+            # spectral axis from the slicing item when needed.
             item = self._slice_item(item)
             return self.hits[item]
         except (TypeError, KeyError):
@@ -246,6 +249,7 @@ class SpectralAxisMixinClass(object):
             # But let IndexError raise.
             logger.info("hits cannot be sliced.")
         return self.hits
+
 
 class WeightMixinClass(object):
     """Mixin class to define a weight property from the uncertainty"""
@@ -264,7 +268,10 @@ class HitsMixinClass(object):
 
     _hits = None
 
-    def __init__(self, *args, hits=None, **kwargs):
+    def __init__(self, *args, hits=_HITS_UNSET, **kwargs):
+        source = args[0] if args else kwargs.get("data")
+        hits = resolve_hits(source, hits)
+
         # Initialize with the parent...
         super().__init__(*args, **kwargs)
 
@@ -295,7 +302,110 @@ class HitsMixinClass(object):
             # Catching KeyError for Python 3.12.
             # But let IndexError raise.
             logger.info("hits cannot be sliced.")
-        return self.hits
+
+    def _arithmetic_hits(self, operation, operand, handle_hits, axis=None):
+        """Return the hits array for an arithmetic operation.
+
+        This mirrors :meth:`astropy.nddata.NDArithmeticMixin._arithmetic_mask`:
+        when only one operand carries hits, that array is kept; when both do,
+        ``handle_hits`` decides how to combine them.
+
+        Parameters
+        ----------
+        operation : callable
+            The arithmetic operation being performed.
+        operand : object or None
+            The second operand, or ``None`` for a collapse operation.
+        handle_hits : callable, str or None
+            ``None`` discards hits, ``'first_found'`` keeps the hits of the
+            first operand that has them and a callable combines two hit maps.
+        axis : int or tuple of int, optional
+            Axis used by collapse operations.
+
+        Returns
+        -------
+        hits : `~numpy.ndarray` or None
+            The hits of the result.
+        """
+        if handle_hits is None:
+            return None
+
+        if operand is None:
+            # Collapse operation: reduce hits along the same axes as the data
+            # so that both arrays keep matching shapes.
+            if self.hits is None:
+                return None
+            return operation(self.hits, axis=axis)
+
+        operand_hits = getattr(operand, "hits", None)
+
+        if handle_hits in ("ff", "first_found"):
+            if self.hits is not None:
+                return self.hits.copy()
+            if operand_hits is not None:
+                return operand_hits.copy()
+            return None
+
+        if not callable(handle_hits):
+            raise ValueError(
+                "handle_hits must be None, 'first_found' or a callable, "
+                f"got {handle_hits!r}"
+            )
+
+        if self.hits is None:
+            return None if operand_hits is None else operand_hits.copy()
+        if operand_hits is None:
+            return self.hits.copy()
+        return handle_hits(self.hits, operand_hits)
+
+    def _arithmetic(self, operation, operand=None, operand2=None, handle_hits=np.add, **kwargs):
+        """Arithmetic operation that preserves the hits attribute.
+
+        This method ensures that the ``hits`` attribute is propagated through
+        arithmetic operations (add, subtract, multiply, divide, etc.) performed
+        on the data.  By default the hit counts of both operands are added,
+        which is the meaningful combination for count-like data.  Pass
+        ``handle_hits='first_found'`` to keep only one hit map, a callable to
+        combine them differently, or ``handle_hits=None`` to drop hits.
+
+        Parameters
+        ----------
+        operation : callable
+            The arithmetic operation (e.g., numpy.add, numpy.multiply).
+        operand : object, optional
+            The second operand for binary operations.
+        operand2 : object, optional
+            Alternative form for the second operand, kept for compatibility
+            with the legacy astropy ``_arithmetic`` signature.
+        handle_hits : callable, str or None, optional
+            How to combine hits when both ``self`` and ``operand`` have hits:
+
+            - ``np.add`` (default): sum the hit maps (counts add up)
+            - ``'first_found'``: use ``self.hits`` if set, else ``operand.hits``
+            - callable: called as ``handle_hits(self.hits, operand.hits)``
+            - ``None``: do not propagate hits
+        **kwargs :
+            Additional keyword arguments passed to the parent ``_arithmetic``.
+
+        Returns
+        -------
+        result, kwargs : tuple
+            The result of the arithmetic operation with hits preserved.
+        """
+        # ``axis`` must be forwarded to the parent but is also needed to
+        # collapse hits consistently.
+        axis = kwargs.get("axis", None)
+
+        # Call the parent _arithmetic method (NDArithmeticMixin._arithmetic).
+        # ``operand2`` is not part of astropy's current signature; passing it
+        # positionally would be interpreted as ``propagate_uncertainties``.
+        result, init_kwds = super()._arithmetic(operation, operand, **kwargs)
+
+        init_kwds["hits"] = self._arithmetic_hits(
+            operation, operand, handle_hits, axis=axis
+        )
+
+        return result, init_kwds
 
     def _slice(self, item):
         kwargs = super()._slice(item)

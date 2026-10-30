@@ -46,6 +46,10 @@ Minimum versions are raised on minor or major releases, never on patch
 releases. The current floors and supported versions are listed in
 `docs/min_versions.md <docs/min_versions.md>`__.
 
+Python 3.8 and the associated Astropy 5.2 stack are targeted for removal in
+``ftsdata`` 0.2.0, or once the CONCERTO environment used by ``kidsdata`` moves
+to Python 3.11+ and Astropy 7+.
+
 Installation
 ------------
 
