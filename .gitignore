@@ -70,6 +70,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/_generated/
+docs/sg_execution_times.rst
 **/gen_api/
 
 # PyBuilder

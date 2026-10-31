@@ -8,6 +8,9 @@ import sys
 # Make the ftsdata package importable from the source tree.
 sys.path.insert(0, os.path.abspath(".."))
 
+# Examples are executed during the docs build; never try to open a GUI.
+os.environ.setdefault("MPLBACKEND", "Agg")
+
 # -- General configuration ------------------------------------------------
 
 extensions = [
@@ -22,6 +25,7 @@ extensions = [
     "sphinx_copybutton",
     "myst_parser",
     "sphinxcontrib.mermaid",
+    "sphinx_gallery.gen_gallery",
 ]
 
 # MyST-Parser extensions — dollarmath enables $...$ and $$...$$ in .md files
@@ -32,6 +36,25 @@ myst_enable_extensions = [
 
 plot_html_show_source_link = False
 plot_html_show_formats = False
+
+# -- Sphinx-Gallery: notebook-style examples ------------------------------
+#
+# The scripts in ../examples are executed at build time, so the figures in
+# the documentation are always produced by the current code (in CI).  Each
+# example page also offers the .py source and a .ipynb notebook for download.
+sphinx_gallery_conf = {
+    "examples_dirs": ["../examples"],
+    "gallery_dirs": ["_generated/examples"],
+    "filename_pattern": r"/plot_",
+    "download_all_examples": True,
+    "remove_config_comments": True,
+    # A failing example must fail the docs build instead of silently
+    # publishing an empty page.
+    "abort_on_example_error": True,
+    "show_memory": False,
+    # Locally, PLOT_GALLERY=0 builds the prose without executing examples.
+    "plot_gallery": os.environ.get("PLOT_GALLERY", "1") == "1",
+}
 
 mermaid_init_js = """
 mermaid.initialize({

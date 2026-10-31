@@ -62,6 +62,7 @@ docs = [
     "sphinx-copybutton",
     "myst-parser>=3.0",
     "sphinxcontrib-mermaid>=0.9",
+    "sphinx-gallery>=0.15",
     "matplotlib",
 ]
 

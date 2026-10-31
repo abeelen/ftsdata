@@ -11,6 +11,7 @@ transforms, FITS/HDF5 I/O and co-addition routines.
 :maxdepth: 2
 
 usage
+_generated/examples/index
 api
 min_versions
 releasing
