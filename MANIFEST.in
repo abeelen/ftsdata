@@ -4,4 +4,5 @@
 prune build
 prune docs/_build
 prune docs/gen_api
+prune examples
 global-exclude *.pyc *.o

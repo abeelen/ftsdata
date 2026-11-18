@@ -32,6 +32,8 @@ jobs:
             python-version: "3.14"
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-python@v5
         with:
@@ -65,6 +67,8 @@ jobs:
       MPLBACKEND: Agg
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-python@v5
         with:
@@ -79,6 +83,9 @@ jobs:
 
       - name: Build documentation
         run: python -m sphinx -W --keep-going -b html docs _site
+        env:
+          # Ensure git LFS objects are downloaded for FITS files in the examples/
+          GIT_LFS_SKIP_SMUDGE: "0"
 
       - name: Upload built documentation
         if: always()
@@ -103,6 +110,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-python@v5
         with:
@@ -119,6 +128,9 @@ jobs:
 
       - name: Build documentation
         run: python -m sphinx -W --keep-going -b html docs _site
+        env:
+          # Ensure git LFS objects are downloaded for FITS files in the examples/
+          GIT_LFS_SKIP_SMUDGE: "0"
 
       - uses: actions/upload-pages-artifact@v3
         with:
